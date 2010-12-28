@@ -1,0 +1,26 @@
+{
+  'name': 'err',
+  'description': 'Simplified Node.js error-handling',
+  'keywords': ['errors', 'exceptions'],
+  'author': 'Trevor Burnham',
+  'email': 'trevorburnham@gmail.com',
+  'homepage': 'http://github.com/TrevorBurnham/err',
+  'repository':
+  {
+    'type':'git',
+    'url':'http://github.com/TrevorBurnham/err.git'
+  },
+  'licenses': [{'type': 'MIT'}],
+  'version': '0.1.0',
+  'engines': {
+    'node': '>= 0.2.0'
+  },
+  'dependencies': {
+    'styout': '>= 0.5.1',
+    'underscore': '>= 1.1.3'
+  },
+  'directories': {
+    'lib': './lib'
+  },
+  'main': './lib/err'
+}
