@@ -10,4 +10,4 @@ err.logByDefault = true
 assert.throws (-> throw err 'And this should be the third logged error message'), Error
 assert.throws (-> throw err 'But this one should not be logged', false), Error
 
-console.log 'All tests passed.'
+throw err 'All tests passed', 'This error is nothing to worry about'

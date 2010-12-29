@@ -17,7 +17,10 @@ newErrInstance = ->
       [name, message, log] = [null, name, message]
     
     if name
+      sup = new Error(message)
+      sup.name = name
       e = new (instance.getClass(name))(name, message)
+      e.stack = sup.stack  # needed because stack is a magical property
     else
       e = new Error(message)
     _.extend e, ErrorExtras
