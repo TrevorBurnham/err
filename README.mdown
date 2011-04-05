@@ -1,6 +1,6 @@
 ## err
 
-**err** makes it easy to throw errors with different types. It's aimed at Node.js, which requires errors to be instances of `Error`.
+**err** makes it easy to throw `Error` subclasses with different types in Node.js, with full stack traces.
 
 ## Installation
 
@@ -12,18 +12,9 @@
 
 First, add
 
-    err = (require 'err').instance 'yourProject'
+    err = require 'err'
 
-to the top of each file in your project.
-
-Now instead of writing
-
-    class IllegalArgument extends Error
-      @name = 'IllegalArgument'
-    ...
-    throw new IllegalArgument('Expected a string but got an array')
-
-you can instead just write
+to the top of your module. Now you can write
 
     throw err 'IllegalArgument', 'Expected a string but got an array'
 
@@ -33,12 +24,10 @@ In a stack trace, this will give you
 
     IllegalArgument: Expected a string but got an array
 
-The error object will be an instance of `err.getClass('IllegalArgument')`, which means that you can write, for instance,
+The error object will be an instance of `err.getClass('IllegalArgument')`, which is great for testing:
 
     assert = require 'assert'
     assert.throws myErrorProneFunction, err.getClass('IllegalArgument'), 'An IllegalArgument error should be thrown'
-
-to verify that the correct type of error is being thrown.
 
 You can also just write
 
@@ -50,14 +39,12 @@ as shorthand for
 
 ## Logging
 
-You can log errors as they occur by adding `true` to an `err` call. Alternatively, you can set `err.logByDefault` to `true`, in which case logging can be suppressed by passing `false` to an `err` call.
-
-Logging is powered by [styout](https://github.com/TrevorBurnham/styout), and can be customized by manipulating `(require 'styout').instance 'err'`.
-
-An error can also be logged later by calling `.log()` on the instance (with an optional message overriding the existing `.message`). The `.isLogged` value tells you whether an error instance has already been logged. So, you might write
+You can log errors as they occur by adding `true` as the last argument to an `err` call. You can also log it later by calling `.log()` on the instance (with an optional message overriding the existing `.message`). The `.isLogged` value tells you whether an error instance has already been logged. So, you might write
 
     catch e
       e.log() unless e.isLogged
+
+Note that this only gives you the error message. If you want the full stack trace, use `.stack`.
 
 ## Copyright and license
 
