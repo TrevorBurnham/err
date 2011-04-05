@@ -1,43 +1,26 @@
-out = (require 'styout').instance 'err'
 _ = require 'underscore'
 
 class NamedError extends Error
   constructor: (@name, @message) ->
 
-ErrorExtras =
-  isLogged: false
-  log: (message = @message) ->
-    out.error message
-    @isLogged = true
+classes = {}
 
-newErrInstance = ->
-  instance = (name, message, log = instance.logByDefault) ->
-    if arguments.length is 1 then [name, message, log] = [null, name, log]
-    if arguments.length is 2 and typeof message is 'boolean'
-      [name, message, log] = [null, name, message]
-    
-    if name
-      sup = new Error(message)
-      sup.name = name
-      e = new (instance.getClass(name))(name, message)
-      e.stack = sup.stack  # needed because stack is a magical property
-    else
-      e = new Error(message)
-    _.extend e, ErrorExtras
-    
-    if log
-      e.log()
-    
-    e
+module.exports = err = (name, message, log = false) ->
+  unless _.isString arguments[1]
+    [name, message, log] = ['Error', name, message]
+  sup = new Error(message)
+  sup.name = name
+  e = new (err.getClass(name))(name, message)
+  e.stack = sup.stack  # needed because stack is a magical property
+  _.extend e,
+    isLogged: false
+    log: (message = @message) ->
+      console.error message
+      @isLogged = true
+  
+  if log then e.log()
+  e
 
-errInstanceMixin =
-  logByDefault: false
-  classes: {}
-  getClass: (name) ->
-    return @classes[name] if @classes[name]
-    @classes[name] = class NamedErrorSubclass extends NamedError
-
-instances = {}
-exports.instance = (id) ->
-  return instances[id] if instances[id]
-  instances[id] = _.extend newErrInstance(), errInstanceMixin, {id}
+err.getClass = (name) ->
+  return classes[name] if classes[name]
+  classes[name] = class NamedErrorSubclass extends NamedError
