@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/TrevorBurnham/err.png)](http://travis-ci.org/TrevorBurnham/err)
 ## err
 
 **err** makes it easy to throw `Error` subclasses with different types in Node.js, with full stack traces.
